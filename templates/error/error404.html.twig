@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mt-1 text-center">
+                <img src="../images/404-error.png" width="350" class="img-fluid p-5" alt="Erreur 404">
+            </div>
+            <div class="col-lg-6 mt-1 d-flex align-items-center">
+                <div class="row">
+                    <div class="col-12 my-2 text-center"><h1 class="display-3 m-0">Page non trouvée !</h1></div>
+                    <div class="col-12 my-2 text-center"><h3 class="m-0">La page que vous cherchez n'existe pas ou a été déplacé.</h3></div>
+                    <div class="col-12 my-2 text-center"><h3 class="m-0"><a href="{{ path('index') }}">Retourner à l'accueil</a></h3></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

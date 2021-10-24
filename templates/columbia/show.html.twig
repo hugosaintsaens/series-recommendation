@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	{% include '/layout/header.html.twig' %}
+	<div class="container">
+		<div class="row mt-5">
+			<div class="col-12">
+				<h1 class="mb-0 text-center fw-bold text-decoration-underline">Description de la série</h1>
+			</div>
+			<div class="col-12">
+				<div class="row mt-5">
+					<div class="col-lg-4 col-12">
+						<h2 class="mb-0 text-left fw-bold">Nom :</h2>
+					</div>
+					<div class="col-lg-8 col-12">
+						<h2 class="mb-0">{{ serie.name }}</h2>
+					</div>
+				</div>
+			</div>
+			{% if app.user %}
+				<div class="col-12">
+					<div class="row mt-5">
+						<div class="col-lg-4 col-12">
+							<h2 class="mb-0 text-left fw-bold">Aime :</h2>
+						</div>
+						<div class="col-lg-8 col-12">
+							{% if likes.favorite == 1 %}
+								<a href="{{ path('likes', {'previous': 'serie', 'id': likes.id}) }}">
+									<img src="/images/hand-thumbs-up-fill.svg" width="40" class="img-fluid" alt="J'aime">
+								</a>
+							{% elseif likes.favorite == 0 %}
+								<a href="{{ path('likes', {'previous': 'serie', 'id': likes.id}) }}">
+									<img src="/images/hand-thumbs-up.svg" width="40" class="img-fluid" alt="Je n'aime pas">
+								</a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			{% endif %}
+			<div class="col-12">
+				<div class="row mt-5">
+					<div class="col-lg-4 col-12">
+						<h2 class="mb-0 text-left fw-bold">Top mots-clés :</h2>
+					</div>
+					<div class="col-lg-8 col-12 text-left font-monospace">
+						{% for word in words %}
+							{% if word == words|last %}
+								<h2 class="d-inline m-0">{{ word.libelle }}</h2>
+							{% else %}
+								<h2 class="d-inline m-0">{{ word.libelle }},</h2>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="row mt-5">
+					<div class="col-lg-4 col-12">
+						<h2 class="mb-0 text-left fw-bold">Séries similaires :</h2>
+					</div>
+					<div class="col-lg-8 col-12">
+						{% for similarSerie in similarSeries %}
+							{% if similarSerie == similarSeries|last %}
+								<h2 class="d-inline m-0">
+									<a href="{{ path('serie', {'id': similarSerie.id}) }}">{{ similarSerie.name }}</a>
+								</h2>
+							{% else %}
+								<h2 class="d-inline m-0">
+									<a href="{{ path('serie', {'id': similarSerie.id}) }}">{{ similarSerie.name }}</a>,
+								</h2>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

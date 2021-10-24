@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="container text-center">
+		<a href="{{ path('index') }}">
+			<img src="images/logo.png" width="300" class="img-fluid my-5">
+		</a>
+		<h1 class="display-6">
+			<strong>Se connecter à LP Series</strong>
+		</h1>
+	</div>
+	<div class="container-fluid mt-4">
+		<div class="row">
+			<div class="col-lg-4 col-md-6 col-sm-8 col-12 mx-auto">
+				<form method="post" class="p-3 border rounded-3">
+					{% if error %}
+						<div class="alert alert-danger text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+					{% endif %}
+					<label class="fw-bold" for="name">Nom d'utilisateur</label>
+					<input class="form-control" type="text" name="name" value="{{ last_username }}" placeholder="Entrer votre nom d'utilisateur" maxlength="10" autocomplete="off" required autofocus>
+					<label class="fw-bold mt-2" for="password">Mot de passe</label>
+					<input class="form-control" type="password" name="password" placeholder="Entrer votre mot de passe" maxlength="30" autocomplete="off" required>
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+					<button class="btn btn-primary w-100 mt-4" type="submit">Se connecter</button>
+				</form>
+				<div class="text-center mt-4 p-3 border rounded-3">
+					<span>Nouveau sur notre site ?</span>
+					<a href="{{ path('signup') }}">Créer un compte</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

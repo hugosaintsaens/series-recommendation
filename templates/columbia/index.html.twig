@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	{% include '/layout/header.html.twig' %}
+	<div class="container-fluid mt-5">
+		<div class="row">
+			<div class="col-lg-8 col-md-10 col-12 mx-auto">
+				{{form_start(form, {'attr': {'class': 'row'}}) }}
+				<div class="col-lg-10 col-12 mt-2">
+					{{form_row(form.mot, {'label': false, 'attr': {'class': 'form-control', 'placeholder' : 'Saisir un mot clé', 'autofocus': 'autofocus'}}) }}
+				</div>
+				<div class="col-lg-2 col-md-4 col-6 mt-2">
+					{{form_row(form.recherche, {'label': 'Rechercher', 'attr': {'class': 'btn btn-primary w-100'}}) }}
+				</div>
+				{{form_end(form)}}
+			</div>
+		</div>
+	</div>
+	<div class="container my-5">
+		<table class="table table-hover border mb-5">
+			<thead>
+				<tr class="table-dark">
+					<th scope="col" class="p-4 text-center align-middle fs-2">{{ (app.user) ? 'Recommandées pour vous' : 'Séries disponibles' }}</th>
+					{% if app.user %}
+						<th scope="col" class="p-4 text-center align-middle fs-2">Vous aimez ?</th>
+					{% endif %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for tuple in tuples %}
+					<tr class="table-light">
+						<td class="p-4 text-center align-middle">
+							<a href="{{ path('serie', {'id' : tuple.series_id}) }}">
+								<strong>{{ tuple.series_name }}</strong>
+							</a>
+						</td>
+						{% if app.user and tuple.likes_favorite == 1 %}
+							<td class="p-3 text-center align-middle">
+								<a href="{{ path('likes', {'previous': 'index', 'id': tuple.likes_id, 'page': page}) }}">
+									<img src="/images/hand-thumbs-up-fill.svg" width="40" class="img-fluid" alt="J'aime">
+								</a>
+							</td>
+						{% elseif app.user and tuple.likes_favorite == 0 %}
+							<td class="p-3 text-center align-middle">
+								<a href="{{ path('likes', {'previous': 'index', 'id': tuple.likes_id, 'page': page}) }}">
+									<img src="/images/hand-thumbs-up.svg" width="40" class="img-fluid" alt="Je n'aime pas">
+								</a>
+							</td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{# Création de la variable pages, qui représente le nombre de pages nécessaires à l'affichage de toutes les séries, arrondissant à l'entier supérieur #}
+		{% set pages = (total / limit)|round(0, 'ceil') %}
+		<nav aria-label="Page navigation">
+			<ul class="pagination d-flex justify-content-center flex-wrap m-0">
+				<li class="page-item me-1 my-1{{ (page == 1) ? ' disabled' : '' }}">
+					<a class="page-link rounded" href="{{ (page > 1) ? path('index', {'page': 1}) : '' }}" aria-label="Debut">
+						<span aria-hidden="true">Début</span>
+					</a>
+				</li>
+				<li class="page-item my-1{{ (page == 1) ? ' disabled' : '' }}">
+					<a class="page-link rounded-start" href="{{ (page > 1) ? path('index', {'page': page - 1}) : '' }}" aria-label="Precedent">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				{% for item in 1..pages %}
+					<li class="page-item my-1{{ (page == item) ? ' active' : '' }}">
+						<a class="page-link" href="{{ path('index', {'page': item}) }}">{{ item }}</a>
+					</li>
+				{% endfor %}
+				<li class="page-item my-1{{ (page == pages) ? ' disabled' : '' }}">
+					<a class="page-link rounded-end" href="{{ (page < pages) ? path('index', {'page': page + 1}) : '' }}" aria-label="Suivant">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+				<li class="page-item ms-1 my-1{{ (page == pages) ? ' disabled' : '' }}">
+					<a class="page-link rounded" href="{{ (page < pages) ? path('index', {'page': pages}) : '' }}" aria-label="Fin">
+						<span aria-hidden="true">Fin</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+	{% include '/layout/footer.html.twig' %}
+
+{% endblock %}
